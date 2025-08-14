@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Database, ref, onValue } from '@angular/fire/database';
 import { Observable } from 'rxjs';
 
@@ -6,25 +6,27 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class FirebaseService {
-  private database: Database = inject(Database);
+  constructor(private db: Database) {}
 
   getBookingTrips() {
-    return new Observable(subscriber => {
-      const bookingRef = ref(this.database, 'booking_trips');
-      onValue(bookingRef, (snapshot) => {
+    return new Observable<any[]>(subscriber => {
+      const bookingRef = ref(this.db, 'booking_trips');
+      const unsubscribe = onValue(bookingRef, (snapshot) => {
         const data = snapshot.val();
         subscriber.next(data ? Object.values(data) : []);
       });
+      return () => unsubscribe();
     });
   }
 
   getDataFromNode(node: string) {
-    return new Observable(subscriber => {
-      const nodeRef = ref(this.database, node);
-      onValue(nodeRef, (snapshot) => {
+    return new Observable<any[]>(subscriber => {
+      const nodeRef = ref(this.db, node);
+      const unsubscribe = onValue(nodeRef, (snapshot) => {
         const data = snapshot.val();
         subscriber.next(data ? Object.values(data) : []);
       });
+      return () => unsubscribe();
     });
   }
 }
