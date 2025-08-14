@@ -15,9 +15,10 @@ export class AppComponent implements OnInit {
   constructor(private firebaseService: FirebaseService) {}
 
   ngOnInit() {
-    this.firebaseService.getBookingTrips().subscribe(
-      data => this.bookingTrips = data,
-      err => console.error(err)
-    );
+    this.firebaseService.getBookingTrips().subscribe({
+      next: (data: any[]) => this.bookingTrips = data || [],
+      error: (error) => console.error('Error fetching trips:', error),
+      complete: () => console.log('Booking trips subscription completed')
+    });
   }
 }
