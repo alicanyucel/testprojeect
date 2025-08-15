@@ -326,6 +326,36 @@
 
 <div class="content" role="main">
 
+  <!-- Auth status banner -->
+  <div *ngIf="authError || authUser === null" style="width:100%;max-width:960px;margin:8px auto;padding:8px;border-radius:4px;background:#fff3cd;color:#856404;border:1px solid #ffeeba;">
+    <div *ngIf="authError">
+      <strong>Auth error:</strong> {{ authError }}
+    </div>
+    <div *ngIf="!authError && authUser === null">
+      Attempting anonymous sign-in... If this hangs, enable Anonymous sign-in in Firebase Console.
+    </div>
+    <div *ngIf="authUser">
+      Signed in anonymously (uid: {{ authUser.uid }}).
+    </div>
+  </div>
+
+  <!-- Booking trips (from Firebase) -->
+  <section style="width:100%;max-width:960px;margin:12px auto;padding:12px;border-radius:6px;background:#f7f7f9;border:1px solid #e1e1e8;">
+    <h3>Booking trips (Realtime Database)</h3>
+    <div *ngIf="bookingTrips?.length; else noTrips">
+      <ul>
+        <li *ngFor="let trip of bookingTrips; let i = index">
+          <strong>{{ i + 1 }}.</strong>
+          <span *ngIf="trip?.origin">{{ trip.origin }} → {{ trip.destination }}</span>
+          <pre *ngIf="!trip?.origin" style="display:inline-block;margin:0">{{ trip | json }}</pre>
+        </li>
+      </ul>
+    </div>
+    <ng-template #noTrips>
+      <p>No trips received yet. If this stays empty, check Realtime DB rules and anonymous auth.</p>
+    </ng-template>
+  </section>
+
   <!-- Highlight Card -->
   <div class="card highlight-card card-small">
 
@@ -480,4 +510,4 @@
 <!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<router-outlet></router-outlet>
+<!-- router-outlet removed: AppModule has no RouterModule configured -->
