@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { environment } from '../app/environment/environment';
-import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
-import { getDatabase, provideDatabase } from '@angular/fire/database';
-
-const app = initializeApp(environment.firebaseConfig);
-
-
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-    provideDatabase(() => getDatabase())
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]

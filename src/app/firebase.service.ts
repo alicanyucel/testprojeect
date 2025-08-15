@@ -1,32 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Database, ref, onValue } from '@angular/fire/database';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
-  constructor(private db: Database) {}
+  constructor(private db: AngularFireDatabase) {}
 
-  getBookingTrips() {
-    return new Observable<any[]>(subscriber => {
-      const bookingRef = ref(this.db, 'booking_trips');
-      const unsubscribe = onValue(bookingRef, (snapshot) => {
-        const data = snapshot.val();
-        subscriber.next(data ? Object.values(data) : []);
-      });
-      return () => unsubscribe();
-    });
+  getBookingTrips(): Observable<any[]> {
+  return this.db.list('booking_trips').valueChanges() as unknown as Observable<any[]>;
   }
 
-  getDataFromNode(node: string) {
-    return new Observable<any[]>(subscriber => {
-      const nodeRef = ref(this.db, node);
-      const unsubscribe = onValue(nodeRef, (snapshot) => {
-        const data = snapshot.val();
-        subscriber.next(data ? Object.values(data) : []);
-      });
-      return () => unsubscribe();
-    });
+  getDataFromNode(node: string): Observable<any[]> {
+  return this.db.list(node).valueChanges() as unknown as Observable<any[]>;
   }
 }
